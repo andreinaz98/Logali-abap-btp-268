@@ -1,0 +1,87 @@
+@Metadata.layer: #CORE
+
+@UI.headerInfo: { typeName: 'Libro',
+                  typeNamePlural: 'Libros',
+                  title: { type: #STANDARD,
+                           value: 'Titulo' },
+                  description: { type: #STANDARD, 
+                                 value: 'Titulo'},
+                  imageUrl: 'Imagen'}
+
+@Search.searchable: true //habilita la capacidad de búsqueda avanzada
+
+annotate entity zc_libros_001
+    with 
+{
+    @UI: { facet: [{ id: 'DetallesLibro', //corchetes Coleccion de grupos, llaves coleccion de elementos dentro del grupo
+                     label: 'Detalles',
+                     type: #COLLECTION,
+                     position: 10 }, // se colocan las separaciones de las columnas con margen de 10 para tener espacio de agregar alguna en el futuro 
+                     
+                     { id:'DetallesLibro', //-primera pestaña, detalles del libro
+                       label: 'Detalles',
+                       type: #FIELDGROUP_REFERENCE,//permite ver detalles que se agregan como referencia en la navegacion
+                       targetQualifier: 'DetallesLibro', //Origen de navegacion
+                       position: 10}, 
+                       
+                       { id:'Compradores', //segunda pestaña, Compradores
+                       label: 'Compradores',
+                       type: #LINEITEM_REFERENCE,//permite agregar items 
+                       targetElement: '_Clientes', //se relaciona con la asociación que creamos
+                       position: 30}],
+      lineItem: [{ position: 10,
+                   importance: #HIGH }],//si es high renderiza el tipo de pantalla: escritorios, tables y moviles 
+                                   
+      fieldGroup: [{  qualifier: 'DetallesLibro', //queremos que salga tambien el detalles  
+                    position: 10 }]}
+     IdLibro;
+     @UI: { lineItem: [{ position: 20,
+            importance: #HIGH }],
+            selectionField: [{ position: 10 }]} //sando esta etiqueta da opcion de buscar por este campo y la data se trae usando fiori element con query Odata u
+  Titulo;
+
+  @Search.defaultSearchElement: true // habilita la búsqueda
+  @Search.fuzzinessThreshold: 0.8 //umbral: ayuda al usuario a buscar por cierta cantidad de caracteres este campo
+  @Search.ranking: #HIGH
+  @UI: { lineItem: [{ position: 30,   //Campos que quiero que salgan 
+                 importance: #HIGH }],
+         selectionField: [{ position: 20 }]}
+  Editorial;
+  @UI: { lineItem: [{ position: 40, //Campos que quiero que salgan 
+                 importance: #HIGH }],
+         selectionField: [{ position: 30 }]
+         }
+  Autor;
+  // con esta anotacion indicamos de donde se quiere la ayuda de búsqueda
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'zc_categorias_001', //lo trae de esta entidad
+                                                 element: 'BiCateg'} }] //se indica el elemento que se quiere mostrar
+//lo que se agrega es lo que se quiere que forme parte de la interfaz de usuario y de la pantalla de seleccion
+  @UI: { lineItem: [{ position: 50,
+                importance: #HIGH }],
+         fieldGroup: [{  qualifier: 'DetallesLibro',
+                   position: 20 }],
+        selectionField: [{ position: 40 }]}
+  Categoria;
+
+  @UI: { lineItem: [{ position: 60,
+                 importance: #MEDIUM }]}
+  Formato;
+
+  @UI: { lineItem: [{ position: 70,
+                 importance: #MEDIUM }]}
+  Paginas;
+
+  @UI: { lineItem: [{ position: 80,
+                 importance: #HIGH }],
+         fieldGroup: [{  qualifier: 'DetallesLibro',
+                         position: 30 }]}
+  Precio;
+  
+  @UI: { lineItem: [{ position: 90,
+                      importance: #HIGH,
+                      criticality: 'Ventas',// se obtiene  a traves de la columna Ventas
+                      value: 'Text',
+                      label: 'Status' }]}
+  Ventas;
+
+}
