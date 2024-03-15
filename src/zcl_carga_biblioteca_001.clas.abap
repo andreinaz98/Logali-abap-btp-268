@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_carga_biblioteca_001 IMPLEMENTATION.
+CLASS ZCL_CARGA_BIBLIOTECA_001 IMPLEMENTATION.
+
+
 METHOD if_oo_adt_classrun~main.
 data: lt_acc_categ type table of ztb_acc_categ_01,
           lt_catego    type table of ztb_catego_001,
