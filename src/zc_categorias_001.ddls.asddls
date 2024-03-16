@@ -12,4 +12,5 @@ define view entity zc_categorias_001
 {
     key bi_categ    as BiCateg,
         descripcion as Descripcion
+        
 }
